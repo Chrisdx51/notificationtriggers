@@ -93,20 +93,13 @@ jobs:
       - name: ✅ Finish Notifications
         run: echo "🎉 Aurana Notifications Complete!"
 
-  generate_weekly_affirmations:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
+      - name: ⏳ Start Generate Weekly Affirmations
+        run: echo "🚀 Starting Weekly Affirmations Function!"
 
-      - name: Install Supabase CLI
+      - name: ✅ Generate Weekly Affirmations
         run: |
-          npm install -g supabase
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/generate_weekly_affirmations \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
 
-      - name: Invoke generate_weekly_affirmations Function
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-        run: |
-          supabase functions invoke generate_weekly_affirmations \
-            --project-ref rhapqmquxypczswwmzun \
-            --no-verify-jwt
+      - name: ✅ Finish Generate Weekly Affirmations
+        run: echo "🎉 Weekly Affirmations Complete!"
