@@ -1,0 +1,112 @@
+name: Aurana Notifications & Weekly Affirmations 🧘‍♂️✨
+
+on:
+  schedule:
+    # Daily Affirmation + Horoscope - 8 AM UTC
+    - cron: '0 8 * * *'
+    # Spiritual Guidance Reminder - Monday 12 PM UTC
+    - cron: '0 12 * * 1'
+    # Aura Capture & Soul Match Notify - Friday 3 PM UTC
+    - cron: '0 15 * * 5'
+    # Weekly Affirmation Generator - Sunday 1 AM UTC (Adjust as needed)
+    - cron: '0 1 * * 0'
+
+  workflow_dispatch: # Manual Trigger Available Too!
+
+jobs:
+  send_notifications:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⏳ Start Notifications Workflow
+        run: echo "🚀 Starting Aurana Notifications Run!"
+
+      # Daily Affirmation
+      - name: ✅ Daily Affirmation (8 AM Daily)
+        if: github.event.schedule == '0 8 * * *' || github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/dailyAffirmation \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+
+      # Daily Horoscope
+      - name: ✅ Daily Horoscope (8 AM Daily)
+        if: github.event.schedule == '0 8 * * *' || github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/dailyHoroscope \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+
+      # Spiritual Guidance Reminder
+      - name: ✅ Spiritual Guidance Reminder (Monday 12 PM)
+        if: github.event.schedule == '0 12 * * 1' || github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/spiritualGuidanceReminder \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+
+      # Aura Capture Reminder
+      - name: ✅ Aura Capture Reminder (Friday 3 PM)
+        if: github.event.schedule == '0 15 * * 5' || github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/auraCaptureReminder \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+
+      # Soul Match Notify
+      - name: ✅ Soul Match Notify (Friday 3 PM)
+        if: github.event.schedule == '0 15 * * 5' || github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/soulMatchNotify \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+
+      # Friend Request Notify
+      - name: ✅ Friend Request Notify (Manual Only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/friendRequestNotify \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+
+      # Friend Accepted Notify
+      - name: ✅ Friend Accepted Notify (Manual Only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/friendAcceptedNotify \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+
+      # Message Notify
+      - name: ✅ Message Notify (Manual Only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/messageNotify \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+
+      # Moon Cycle Notify
+      - name: ✅ Moon Cycle Notify (Manual Only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/moonCycleNotify \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+
+      # Ads Page Update Notify
+      - name: ✅ Ads Page Update Notify (Manual Only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://rhapqmquxypczswwmzun.supabase.co/functions/v1/adsPageUpdateNotify \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+
+      - name: ✅ Finish Notifications
+        run: echo "🎉 Aurana Notifications Complete!"
+
+  generate_weekly_affirmations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Install Supabase CLI
+        run: |
+          npm install -g supabase
+
+      - name: Invoke generate_weekly_affirmations Function
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          supabase functions invoke generate_weekly_affirmations \
+            --project-ref rhapqmquxypczswwmzun \
+            --no-verify-jwt
